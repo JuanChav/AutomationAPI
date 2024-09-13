@@ -108,7 +108,7 @@ https://63b6dfe11907f863aa04ff81.mockapi.io/api/v1/
 
 1. Clone the repository:
    ```bash
-   git clone [<repository-url>](https://github.com/JuanChav/AutomationAPI)
+   git clone https://github.com/JuanChav/AutomationAPI
    ```
 
 2. Install the project dependencies:
