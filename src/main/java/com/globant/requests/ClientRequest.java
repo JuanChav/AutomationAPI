@@ -64,6 +64,17 @@ public class ClientRequest extends BaseRequest {
         return requestDelete(endpoint, createBaseHeaders());
     }
 
+    public Response deleteAllClients() {
+        Response response = getClients();
+        List<Client> clients = getClientsEntity(response);
+
+        for (Client client : clients) {
+            deleteClient(client.getId());
+        }
+
+        return response;
+    }
+
     public Client getClientEntity(@NotNull Response response) {
         return response.as(Client.class);
     }

@@ -17,6 +17,9 @@
       "email": {
         "type": "string"
       },
+      "phone": {
+        "type": "string"
+      },
       "id": {
         "type": "string"
       }
@@ -27,6 +30,7 @@
       "country",
       "city",
       "email",
+      "phone",
       "id"
     ]
   }

@@ -1,8 +1,8 @@
 package com.globant.requests;
 
 import com.globant.models.Client;
+import com.globant.models.Resource;
 import com.globant.utils.Constants;
-import com.globant.utils.JsonFileReader;
 import com.google.gson.Gson;
 import io.restassured.module.jsv.JsonSchemaValidator;
 import io.restassured.path.json.JsonPath;
@@ -19,68 +19,68 @@ public class ResourceRequest extends BaseRequest{
      * @return rest-assured response
      */
     public Response getResource() {
-        endpoint = String.format(Constants.URL, Constants.CLIENTS_PATH);
+        endpoint = String.format(Constants.URL, Constants.RESOURCES_PATH);
         return requestGet(endpoint, createBaseHeaders());
     }
 
     /**
      * Get Resource by id
-     * @param clientId string
+     * @param resourceId string
      * @return rest-assured response
      */
-    public Response getClient(String clientId) {
-        endpoint = String.format(Constants.URL_WITH_PARAM, Constants.CLIENTS_PATH, clientId);
+    public Response getResource(String resourceId) {
+        endpoint = String.format(Constants.URL_WITH_PARAM, Constants.RESOURCES_PATH, resourceId);
         return requestGet(endpoint, createBaseHeaders());
     }
 
     /**
      * Create Resource
-     * @param client model
+     * @param resource model
      * @return rest-assured response
      */
-    public Response createClient(Client client) {
-        endpoint = String.format(Constants.URL, Constants.CLIENTS_PATH);
-        return requestPost(endpoint, createBaseHeaders(), client);
+    public Response createResource(Client resource) {
+        endpoint = String.format(Constants.URL, Constants.RESOURCES_PATH);
+        return requestPost(endpoint, createBaseHeaders(), resource);
     }
 
     /**
-     * Update client by id
-     * @param client model
-     * @param clientId string
+     * Update Resource by id
+     * @param resource model
+     * @param resourceId string
      * @return rest-assured response
      */
-    public Response updateClient(Client client, String clientId) {
-        endpoint = String.format(Constants.URL_WITH_PARAM, Constants.CLIENTS_PATH, clientId);
-        return requestPut(endpoint, createBaseHeaders(), client);
+    public Response updateResource(Client resource, String resourceId) {
+        endpoint = String.format(Constants.URL_WITH_PARAM, Constants.RESOURCES_PATH, resourceId);
+        return requestPut(endpoint, createBaseHeaders(), resource);
     }
 
     /**
-     * Delete client by id
-     * @param clientId string
+     * Delete Resource by id
+     * @param resourceId string
      * @return rest-assured response
      */
-    public Response deleteClient(String clientId) {
-        endpoint = String.format(Constants.URL_WITH_PARAM, Constants.CLIENTS_PATH, clientId);
+    public Response deleteResource(String resourceId) {
+        endpoint = String.format(Constants.URL_WITH_PARAM, Constants.RESOURCES_PATH, resourceId);
         return requestDelete(endpoint, createBaseHeaders());
     }
 
-    public Client getClientEntity(@NotNull Response response) {
-        return response.as(Client.class);
+    public Resource getResourceEntity(@NotNull Response response) {
+        return response.as(Resource.class);
     }
 
-    public List<Client> getClientsEntity(@NotNull Response response) {
+    public List<Resource> getResourcesEntity(@NotNull Response response) {
         JsonPath jsonPath = response.jsonPath();
-        return jsonPath.getList("", Client.class);
+        return jsonPath.getList("", Resource.class);
     }
 
-    public Response createDefaultClient() {
+    /*public Response createDefaultResource() {
         JsonFileReader jsonFile = new JsonFileReader();
-        return this.createClient(jsonFile.getClientByJson(Constants.DEFAULT_CLIENT_FILE_PATH));
-    }
+        return this.createResource(jsonFile.getClientByJson(Constants.DEFAULT_CLIENT_FILE_PATH));
+    }*/
 
-    public Client getClientEntity(String clientJson) {
+    public Resource getResourceEntity(String clientJson) {
         Gson gson = new Gson();
-        return gson.fromJson(clientJson, Client.class);
+        return gson.fromJson(clientJson, Resource.class);
     }
 
     public boolean validateSchema(Response response, String schemaPath) {

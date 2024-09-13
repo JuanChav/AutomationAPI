@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Resources {
+public class Resource {
     private String name;
     private String trademark;
     private int stock;
