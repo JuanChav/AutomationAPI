@@ -2,7 +2,6 @@ package com.globant.stepDefinitions;
 
 import com.globant.models.Client;
 import com.globant.requests.ClientRequest;
-import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -12,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 
 import java.util.List;
-import java.util.Map;
 
 public class ClientSteps {
     private static final Logger logger = LogManager.getLogger(ClientSteps.class);
@@ -22,6 +20,7 @@ public class ClientSteps {
     private Response response;
     private Client   client;
     private String savedPhoneNumber;
+    private String createdClientId;
 
     @Given("there is at least 10 registered clients")
     public void thereIsAtLeast10RegisteredClients() {
@@ -42,7 +41,7 @@ public class ClientSteps {
     }
 
     @When("find the first client named Laura")
-    public void iFindTheFirstClientNamedLaura() {
+    public void findTheFirstClientNamedLaura() {
         response = clientRequest.getClients();
         logger.info(response.jsonPath().prettify());
         Assert.assertEquals(200, response.statusCode());
@@ -62,7 +61,7 @@ public class ClientSteps {
     }
 
     @When("save her current phone number")
-    public void iSaveHerCurrentPhoneNumber() {
+    public void saveHerCurrentPhoneNumber() {
         if (client == null) {
             Assert.fail("No client named Laura found to save her phone number.");
         }
@@ -72,7 +71,7 @@ public class ClientSteps {
     }
 
     @When("update her phone number")
-    public void iUpdateHerPhoneNumber() {
+    public void updateHerPhoneNumber() {
         if (client == null) {
             Assert.fail("No client named Laura found to update her phone number.");
         }
@@ -98,12 +97,51 @@ public class ClientSteps {
     }
 
     @Then("delete all the registered clients")
-    public void iDeleteAllTheRegisteredClients() {
+    public void deleteAllTheRegisteredClients() {
         clientRequest.deleteAllClients();
 
         logger.info("Successfully deleted all registered clients.");
     }
 
+    @When("create a new client")
+    public void createANewClient() {
+        Response response = clientRequest.createDefaultClient();
 
+        Assert.assertEquals(201, response.getStatusCode());
+        this.createdClientId = response.jsonPath().getString("id");
+        logger.info("Successfully created a new client");
+    }
 
+    @When("find the new client")
+    public void findTheNewClient() {
+        Response response = clientRequest.getClient(createdClientId);
+
+        Assert.assertEquals(200, response.getStatusCode());
+        Client foundClient = clientRequest.getClientEntity(response);
+
+        Assert.assertNotNull("Client not found!", foundClient);
+        Assert.assertEquals("Client ID doesn't match!", createdClientId, foundClient.getId());
+        logger.info("Successfully found the client with ID: " + foundClient.getId());
+    }
+
+    @When("update any parameter of the new client")
+    public void updateAnyParameterOfTheNewClient() {
+        Response response = clientRequest.getClient(createdClientId);
+        Assert.assertEquals(200, response.getStatusCode());
+
+        Client clientToUpdate = clientRequest.getClientEntity(response);
+
+        clientToUpdate.setName("Pedro");
+
+        Response updateResponse = clientRequest.updateClient(clientToUpdate, createdClientId);
+
+        Assert.assertEquals(200, updateResponse.getStatusCode());
+        logger.info("Successfully updated the client with ID: " + createdClientId);
+    }
+
+    @When("delete the new client")
+    public void deleteTheNewClient() {
+        clientRequest.deleteClient(createdClientId);
+        logger.info("Successfully deleted the client with ID: " + createdClientId);
+    }
 }
