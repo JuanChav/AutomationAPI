@@ -1,7 +1,8 @@
 {
-  "name": "Manuel",
+  "name": "Laura",
   "lastName": "Munoz",
-  "gender": "Man",
   "country": "Colombia",
-  "city": "Bogota"
+  "city": "Bogota",
+  "email": "a@a.com",
+  "phone": "123456789"
 }

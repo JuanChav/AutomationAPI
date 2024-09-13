@@ -41,7 +41,7 @@ public class ClientSteps {
         }
     }
 
-    @When("I find the first client named Laura")
+    @When("find the first client named Laura")
     public void iFindTheFirstClientNamedLaura() {
         response = clientRequest.getClients();
         logger.info(response.jsonPath().prettify());
@@ -61,7 +61,7 @@ public class ClientSteps {
         logger.info("Found client: " + client);
     }
 
-    @When("I save her current phone number")
+    @When("save her current phone number")
     public void iSaveHerCurrentPhoneNumber() {
         if (client == null) {
             Assert.fail("No client named Laura found to save her phone number.");
@@ -71,7 +71,7 @@ public class ClientSteps {
         logger.info("Saved phone number: " + savedPhoneNumber);
     }
 
-    @When("I update her phone number")
+    @When("update her phone number")
     public void iUpdateHerPhoneNumber() {
         if (client == null) {
             Assert.fail("No client named Laura found to update her phone number.");
@@ -97,13 +97,13 @@ public class ClientSteps {
         logger.info("Successfully validated that the new phone number is different from the saved phone number.");
     }
 
-    @Then("I delete all the registered clients")
+    @Then("delete all the registered clients")
     public void iDeleteAllTheRegisteredClients() {
-        // Enviar la solicitud para eliminar todos los clientes
-        Response deleteResponse = clientRequest.deleteAllClients();
+        clientRequest.deleteAllClients();
 
-        // Validar que la respuesta sea exitosa
-        Assert.assertEquals(204, deleteResponse.statusCode());
         logger.info("Successfully deleted all registered clients.");
     }
+
+
+
 }

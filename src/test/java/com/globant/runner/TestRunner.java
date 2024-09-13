@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 @RunWith(Cucumber.class)
 @CucumberOptions(
         features = "src/test/resources/features",
-        glue = "com.testing.api.stepDefinitions",
+        glue = "com.globant.stepDefinitions",
         snippets = CucumberOptions.SnippetType.CAMELCASE,
         monochrome = true,
         plugin = {"pretty:target/cucumber/cucumber.txt",
