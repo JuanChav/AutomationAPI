@@ -2,6 +2,7 @@ package com.globant.stepDefinitions;
 
 import com.globant.models.Client;
 import com.globant.requests.ClientRequest;
+import com.globant.utils.FakeDataGenerator;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -11,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 
 import java.util.List;
+import java.util.Random;
 
 public class ClientSteps {
     private static final Logger logger = LogManager.getLogger(ClientSteps.class);
@@ -32,10 +34,21 @@ public class ClientSteps {
 
         if (clientList.size() < 10) {
             int clientsToCreate = 10 - clientList.size();
+            Random random = new Random();
+            boolean defaultClientCreated = false;
+
             for (int i = 0; i < clientsToCreate; i++) {
-                response = clientRequest.createDefaultClient();
-                logger.info("Created client with status code: " + response.statusCode());
-                Assert.assertEquals(201, response.statusCode());
+                if (!defaultClientCreated && random.nextBoolean()) {
+                    response = clientRequest.createDefaultClient();
+                    logger.info("Created default client with status code: " + response.statusCode());
+                    Assert.assertEquals(201, response.statusCode());
+                    defaultClientCreated = true;
+                } else {
+                    Client client = FakeDataGenerator.createRandomClient();
+                    response = clientRequest.createClient(client);
+                    logger.info("Created random client with status code: " + response.statusCode());
+                    Assert.assertEquals(201, response.statusCode());
+                }
             }
         }
     }
@@ -105,7 +118,7 @@ public class ClientSteps {
 
     @When("create a new client")
     public void createANewClient() {
-        Response response = clientRequest.createDefaultClient();
+        Response response = clientRequest.createClient(FakeDataGenerator.createRandomClient());
 
         Assert.assertEquals(201, response.getStatusCode());
         this.createdClientId = response.jsonPath().getString("id");

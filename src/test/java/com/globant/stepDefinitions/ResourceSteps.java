@@ -2,6 +2,7 @@
 
     import com.globant.models.Resource;
     import com.globant.requests.ResourceRequest;
+    import com.globant.utils.FakeDataGenerator;
     import io.cucumber.java.en.Given;
     import io.cucumber.java.en.Then;
     import io.cucumber.java.en.When;
@@ -33,7 +34,7 @@
             if (activeCount < 5) {
                 int resourcesToCreate = 5 - (int) activeCount;
                 for (int i = 0; i < resourcesToCreate; i++) {
-                    response = resourceRequest.createDefaultResource();
+                    response = resourceRequest.createResource(FakeDataGenerator.createRandomResource());
                     Assert.assertEquals(201, response.statusCode());
                 }
             }
@@ -86,7 +87,7 @@
             if (currentCount < 15) {
                 int resourcesToCreate = 15 - currentCount;
                 for (int i = 0; i < resourcesToCreate; i++) {
-                    response = resourceRequest.createDefaultResource();
+                    response = resourceRequest.createResource(FakeDataGenerator.createRandomResource());
                     Assert.assertEquals(201, response.statusCode());
                 }
             }
