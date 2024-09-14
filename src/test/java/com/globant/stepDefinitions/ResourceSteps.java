@@ -18,7 +18,7 @@
         private final ResourceRequest resourceRequest = new ResourceRequest();
 
         private Response response;
-        private Resource resource;
+        Resource latestResource;
         List<Resource> activeResources;
 
         @Given("have at least 5 active resources")
@@ -72,5 +72,49 @@
 
             Assert.assertTrue("Not all resources are inactive", allInactive);
             logger.info("Resources inactive");
+        }
+
+        @Given("have at least 15 resources")
+        public void haveAtLeast15Resources() {
+            response = resourceRequest.getResource();
+            Assert.assertEquals(200, response.statusCode());
+
+            List<Resource> resourceList = resourceRequest.getResourcesEntity(response);
+
+            int currentCount = resourceList.size();
+
+            if (currentCount < 15) {
+                int resourcesToCreate = 15 - currentCount;
+                for (int i = 0; i < resourcesToCreate; i++) {
+                    response = resourceRequest.createDefaultResource();
+                    Assert.assertEquals(201, response.statusCode());
+                }
+            }
+            logger.info("There is at least 15 resources");
+        }
+
+        @When("find the latest resource")
+        public void findTheLatestResource() {
+            response = resourceRequest.getResource();
+            Assert.assertEquals(200, response.statusCode());
+
+            List<Resource> resourceList = resourceRequest.getResourcesEntity(response);
+
+            latestResource = resourceList.stream()
+                    .max((r1, r2) -> Integer.compare(Integer.parseInt(r1.getId()), Integer.parseInt(r2.getId())))
+                    .orElse(null);
+
+            Assert.assertNotNull("No resources found", latestResource);
+            logger.info("Latest resource found: " + latestResource.getName());
+        }
+
+        @When("update all the parameters of this resource")
+        public void updateAllTheParametersOfThisResource() {
+            Assert.assertNotNull("Latest resource is not found", latestResource);
+            latestResource.setPrice(999.99f); // Nuevo precio
+            Response updateResponse = resourceRequest.updateResource(latestResource, latestResource.getId());
+            Assert.assertEquals(200, updateResponse.statusCode());
+
+            logger.info("Resource updated successfully: " + latestResource.getName());
         }
     }

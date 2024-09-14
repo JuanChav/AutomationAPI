@@ -5,3 +5,8 @@ Feature: Resource testing CRUD
     Given  have at least 5 active resources
     When  find all resources active
     Then update them as inactive
+
+    Scenario:  Update the last created resource
+      Given  have at least 15 resources
+      When find the latest resource
+      And update all the parameters of this resource
