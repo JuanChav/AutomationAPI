@@ -1,0 +1,10 @@
+{
+  "name": "Default Resource",
+  "trademark": "Trademark Example",
+  "stock": 100,
+  "price": 29.99,
+  "description": "This is a default resource description.",
+  "tags": "id",
+  "active": true,
+  "id": "1"
+}
